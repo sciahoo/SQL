@@ -19,6 +19,29 @@ WITH cte AS
   INNER JOIN cte c
     ON c.DIR_ID = i.PARENT_ID
 )
+,
+cte2 AS
+(
+  SELECT
+    DIR_ID,
+    NAME,
+    TYPE,
+    PARENT_ID
+    --CAST(0 AS varbinary(max)) AS Level
+  FROM PROFFOLDER
+  WHERE PARENT_ID = 3575
+  UNION ALL
+  SELECT
+    i.DIR_ID,
+    i.NAME,
+    i.TYPE,
+    i.PARENT_ID
+    --Level + CAST(i.DIR_ID AS varbinary(max)) AS Level
+  FROM PROFFOLDER i
+  INNER JOIN cte2 c
+    ON c.DIR_ID = i.PARENT_ID
+)
+
 
 SELECT
 M.BESTELLUNG AS Symbol,
@@ -52,29 +75,7 @@ LEFT JOIN MAT M ON C.NAME = M.NAME
 LEFT JOIN CMSRAWMAT R ON C.NAME = R.MATID
 WHERE TYPE = 100 AND M.BESTELLUNG <> ''
 
-UNION
-
-WITH cte2 AS
-(
-  SELECT
-    DIR_ID,
-    NAME,
-    TYPE,
-    PARENT_ID
-    --CAST(0 AS varbinary(max)) AS Level
-  FROM PROFFOLDER
-  WHERE PARENT_ID = 3575
-  UNION ALL
-  SELECT
-    i.DIR_ID,
-    i.NAME,
-    i.TYPE,
-    i.PARENT_ID
-    --Level + CAST(i.DIR_ID AS varbinary(max)) AS Level
-  FROM PROFFOLDER i
-  INNER JOIN cte2 c
-    ON c.DIR_ID = i.PARENT_ID
-)
+UNION 
 
 SELECT
 P.BESTELLUNG AS Symbol,
