@@ -51,3 +51,48 @@ FROM cte C
 LEFT JOIN MAT M ON C.NAME = M.NAME
 LEFT JOIN CMSRAWMAT R ON C.NAME = R.MATID
 WHERE TYPE = 100 AND M.BESTELLUNG <> ''
+
+UNION
+
+WITH cte2 AS
+(
+  SELECT
+    DIR_ID,
+    NAME,
+    TYPE,
+    PARENT_ID
+    --CAST(0 AS varbinary(max)) AS Level
+  FROM PROFFOLDER
+  WHERE PARENT_ID = 3575
+  UNION ALL
+  SELECT
+    i.DIR_ID,
+    i.NAME,
+    i.TYPE,
+    i.PARENT_ID
+    --Level + CAST(i.DIR_ID AS varbinary(max)) AS Level
+  FROM PROFFOLDER i
+  INNER JOIN cte2 c
+    ON c.DIR_ID = i.PARENT_ID
+)
+
+SELECT
+P.BESTELLUNG AS Symbol,
+0 AS Length,
+P.THK AS Width,
+P.PRFWS AS Thicknes,
+11 AS MatType,
+P.COMMENT AS Description,
+P.PRODUCER AS Groups,
+'' AS SubGroups,
+0 AS Grain,
+'m' AS Unit,
+CASE
+	WHEN P.THK <> '' AND P.PRFWS <> ''
+		THEN 1 ELSE 0 END AS FlagActive,
+'logo.png' AS Picture,
+'logo.png' AS Picture1,
+'logo.png' AS Picture2
+FROM cte2 C
+LEFT JOIN PROFIL P ON C.NAME = P.NAME
+WHERE TYPE = 101 AND M.BESTELLUNG <> ''
