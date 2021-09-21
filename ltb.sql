@@ -44,9 +44,9 @@ M.GRAIN AS Grain,
 CASE
 	WHEN LEN(M.TEXT) - LEN(REPLACE(M.TEXT, 'x', '')) = 1
 		THEN 1 ELSE 0 END AS FlagActive,
-'logo.png' AS Picture,
-'logo.png' AS Picture1,
-'logo.png' AS Picture2
+'logo2.png' AS Picture,
+'logo2.png' AS Picture1,
+'logo2.png' AS Picture2
 FROM cte C
 LEFT JOIN MAT M ON C.NAME = M.NAME
 LEFT JOIN CMSRAWMAT R ON C.NAME = R.MATID
