@@ -115,7 +115,7 @@ RIGHT(M.TEXT,CHARINDEX('x',REVERSE(M.TEXT))-1)
 ELSE ''
 END AS Width,
 M.THK AS Thicknes,
-0 AS MatType,
+5 AS MatType,
 M.COMMENT AS Description,
 M.MATCAT AS Groups,
 M.PRODUCER AS SubGroups,
