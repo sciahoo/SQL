@@ -19,9 +19,32 @@ WITH cte AS
   INNER JOIN cte c
     ON c.DIR_ID = i.PARENT_ID
 )
+,
+cte2 AS
+(
+  SELECT
+    DIR_ID,
+    NAME,
+    TYPE,
+    PARENT_ID
+    --CAST(0 AS varbinary(max)) AS Level
+  FROM PROFFOLDER
+  WHERE PARENT_ID = 3575
+  UNION ALL
+  SELECT
+    i.DIR_ID,
+    i.NAME,
+    i.TYPE,
+    i.PARENT_ID
+    --Level + CAST(i.DIR_ID AS varbinary(max)) AS Level
+  FROM PROFFOLDER i
+  INNER JOIN cte2 c
+    ON c.DIR_ID = i.PARENT_ID
+)
 
 SELECT
 M.BESTELLUNG AS Symbol,
+M.BESTELLUNG AS MatId,
 CASE
 	WHEN LEN(M.TEXT) - LEN(REPLACE(M.TEXT, 'x', '')) = 1
 		THEN
@@ -54,30 +77,9 @@ WHERE TYPE = 100 AND M.BESTELLUNG <> ''
 
 UNION
 
-WITH cte2 AS
-(
-  SELECT
-    DIR_ID,
-    NAME,
-    TYPE,
-    PARENT_ID
-    --CAST(0 AS varbinary(max)) AS Level
-  FROM PROFFOLDER
-  WHERE PARENT_ID = 3575
-  UNION ALL
-  SELECT
-    i.DIR_ID,
-    i.NAME,
-    i.TYPE,
-    i.PARENT_ID
-    --Level + CAST(i.DIR_ID AS varbinary(max)) AS Level
-  FROM PROFFOLDER i
-  INNER JOIN cte2 c
-    ON c.DIR_ID = i.PARENT_ID
-)
-
 SELECT
 P.BESTELLUNG AS Symbol,
+P.BESTELLUNG AS MatId,
 0 AS Length,
 P.THK AS Width,
 P.PRFWS AS Thicknes,
